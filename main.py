@@ -111,4 +111,20 @@ def run_simulation():
     dashboard.start_simulation()
 
 if __name__ == "__main__":
-    run_simulation()
+    print("\n" + "="*50)
+    print(" 🛰️  SISTEMA A.E.G.I.S. - INICIALIZACIÓN DE MISIÓN")
+    print("="*50)
+    print(" [1] Modo Simulación Pura (Software-in-the-Loop)")
+    print(" [2] Modo Radar Físico (Hardware-in-the-Loop)")
+    print("="*50)
+    
+    opcion = input(" >>> Elige el modo de operación (1 o 2): ").strip()
+    print("\n")
+    
+    if opcion == '2':
+        # Importamos y ejecutamos tu módulo con Arduino
+        from live_aegis import run_live_aegis
+        run_live_aegis()
+    else:
+        # Por defecto, corre la simulación clásica pre-calculada
+        run_simulation()
