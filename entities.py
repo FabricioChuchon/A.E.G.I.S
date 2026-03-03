@@ -22,13 +22,17 @@ class SpaceObject(ABC):
     def velocity(self): return self._state[3:]
 
 class Satellite(SpaceObject):
-    def __init__(self, dynamics_engine):
+    def __init__(self, dynamics_engine, sensor_equipado = None):
         # Iniciamos en el origen del marco LVLH
         super().__init__([0,0,0], [0,0,0], dynamics_engine)
         self.name = "A.E.G.I.S. Sat"
         self.radius_hitbox = 2.5
         self.brain = AegisBrain()
-        self.sensor = SpaceDebrisSensor(position=[0,0,0], detection_range=200.0)       
+        #self.sensor = SpaceDebrisSensor(position=[0,0,0], detection_range=200.0)       
+        if sensor_equipado is None:
+            self.sensor = SpaceDebrisSensor(position=[0,0,0], detection_range=200.0)
+        else:
+            self.sensor = sensor_equipado
         self.guidance = GuidanceSystem(dynamics_engine)
         self.propulsion = PropulsionSystem(initial_fuel_mass=150.0, dry_mass=180.0, isp=230.0)
         # Historial para telemetría IoT
