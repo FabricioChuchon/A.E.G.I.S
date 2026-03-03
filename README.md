@@ -20,6 +20,7 @@
 * **Matplotlib**: Generación de Radar Táctico 3D y HUD de integridad en tiempo real.
 * **Paho-MQTT**: Gestión del enlace de telemetría entre el satélite y dispositivos móviles.
 * **Unittest**: Automatización de pruebas unitarias para asegurar la robustez de la física orbital.
+* **PySerial**: Permite la comunicación entre el software de alto nivel (Python) y el hardware de detección (Arduino/Radar)
 
 
 ## 🛠️ Instalación y Configuración
@@ -37,7 +38,7 @@ cd AEGIS-Project
 
 ### 3. Instalación de Dependencias
 ```bash
-pip install numpy matplotlib paho-mqtt
+python -m pip install numpy matplotlib paho-mqtt pyserial
 ```
 
 ### 4. Configuración del Broker MQTT
@@ -93,7 +94,7 @@ Para ajustar el comportamiento de la simulación, puedes modificar los siguiente
 Siga estos pasos para una simulación exitosa:
 ### 1. Sin datos del Sensor Físico:
 ### 1.1. Fase de Standby y Conexión
-* Al ejecutar main.py, el sistema inicializará el motor de física HCW y el enlace de telemetría.
+* Al ejecutar main.py, escogemos la primera opción y el sistema inicializará el motor de física HCW y el enlace de telemetría.
 * El programa se detendrá en un estado de Standby, esperando la señal de ignición desde el broker MQTT.
 ### 1.2. Comando de Ignición
 * Para iniciar la secuencia de vuelo, envíe el mensaje de texto INICIAR al tópico uni/aegis/fabricio/comando.
@@ -110,6 +111,9 @@ Siga estos pasos para una simulación exitosa:
 * Verá una "trayectoria fantasma" (línea cian) que representa la proyección de la maniobra de escape.
 
 ### 2. Con datos del Sensor Físico:
+* Al ejecutar el main.py, escogemos la segunda opción y el sistema inicializará el entorno gráfico.
+* En caso no esté conectado el puerto USB y no se haya configurado el nombre correctamente el nombre del puerto, saldrá una alerta.
+* Si está correctamente conectado, podremos poner objetos en el rango de detección del sensor y se materializarán en la simulación.
 
 ## 📞 Contacto
 
@@ -117,7 +121,7 @@ Siga estos pasos para una simulación exitosa:
 * **Desarrollado por**: 
     * Chuchon Huillca Fabricio Xavier fabricio.chuchon.h@uni.pe
     * Rojas Huaman Sebastián Estefano José María s.rojas.h@uni.pe
-    * Cortez Segura Rodrigo Yesu @
+    * Cortez Segura Rodrigo Yesu rodrigo.cortez.s@uni.pe
 * **Universidad**: Universidad Nacional de Ingeniería 
 
 ---
