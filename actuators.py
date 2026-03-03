@@ -21,7 +21,9 @@ class PropulsionSystem:
         
         if req_dv_ms < 0.001: 
             return np.zeros(3)
-
+        
+        # Cálculo Físico (Tsiolkovsky)
+        
         current_total_mass = self.dry_mass + self.fuel_mass
         mass_ratio = np.exp(req_dv_ms / (self.isp * self.gravity))
         final_total_mass = current_total_mass / mass_ratio
@@ -46,4 +48,5 @@ class PropulsionSystem:
             "percent": pct,
             "depleted": self.fuel_depleted
         }
+
     
