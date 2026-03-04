@@ -1,0 +1,96 @@
+#include <Servo.h>
+
+Servo panServo;   // Servo de la base (Pin 9)
+Servo tiltServo;  // Servo del cuello (Pin 10)
+
+// --- PINES DEL SENSOR ULTRASÓNICO ---
+const int Trigger = 6;
+const int Echo = 7;
+
+// --- LÍMITES CALIBRADOS (Mecánica Segura) ---
+int panMin = 5;
+int panMax = 170;
+int tiltMin = 5;
+int tiltMax = 130;
+
+// --- CONTROL DE VELOCIDAD ---
+int pasoPan = 5;    // Avance fino horizontal
+int pasoTilt = 20;  // Salto vertical
+bool direccionDerecha = true;
+
+void setup() {
+  Serial.begin(9600);
+  
+  // Actuadores
+  panServo.attach(9);
+  tiltServo.attach(10);
+  
+  // Sensor
+  pinMode(Trigger, OUTPUT);
+  pinMode(Echo, INPUT);
+  digitalWrite(Trigger, LOW);
+  
+  // Posicionamiento de arranque
+  panServo.write(panMin);
+  tiltServo.write(tiltMin);
+  delay(1500); 
+  
+  // (Textos de bienvenida eliminados para mantener el canal limpio para Python)
+}
+
+void loop() {
+  // Barrido Vertical (Tilt)
+  for (int tilt = tiltMin; tilt <= tiltMax; tilt += pasoTilt) {
+    tiltServo.write(tilt);
+    delay(150); // Estabiliza el cuello antes de barrer lateralmente
+
+    // Barrido Horizontal (Pan) en Zig-Zag
+    if (direccionDerecha) {
+      for (int pan = panMin; pan <= panMax; pan += pasoPan) {
+        panServo.write(pan);
+        procesarTelemetria(pan, tilt);
+      }
+    } else {
+      for (int pan = panMax; pan >= panMin; pan -= pasoPan) {
+        panServo.write(pan);
+        procesarTelemetria(pan, tilt);
+      }
+    }
+    direccionDerecha = !direccionDerecha; // Cambia de dirección
+  }
+  
+  // Retorno fluido para reiniciar el escaneo del perímetro
+  tiltServo.write(tiltMin);
+  delay(800);
+}
+
+// --- NÚCLEO LÓGICO: TELEMETRÍA PURA PARA PYTHON ---
+void procesarTelemetria(int anguloPan, int anguloTilt) {
+  long t;
+  long d;
+
+  // 1. Disparo del pulso ultrasónico
+  digitalWrite(Trigger, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(Trigger, LOW);
+
+  // 2. Lectura del eco con Timeout de 30ms 
+  t = pulseIn(Echo, HIGH, 30000); 
+
+  // 3. Cálculo de distancia a centímetros
+  if (t == 0) {
+    d = 150; // Si no hay eco a tiempo, el perímetro se asume libre (150cm)
+  } else {
+    d = t / 59; 
+  }
+  
+  // 4. TRANSMISIÓN CSV: Solo números crudos separados por comas
+  Serial.print(anguloPan);
+  Serial.print(",");
+  Serial.print(anguloTilt);
+  Serial.print(",");
+  Serial.println(d);
+  
+  // 5. Pausa de estabilización
+  delay(25); 
+}
