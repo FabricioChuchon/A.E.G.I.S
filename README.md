@@ -50,14 +50,18 @@ El sistema está configurado por defecto para usar el broker público de Mosquit
 Nota: Para visualizar la telemetría en tiempo real, puedes usar clientes como IoT MQTT Panel o una app móvil configurada con el mismo tópico.
 
 
-### 5. Ejecución del Sistema
+### 5. Configuración del Arduino
+
+En el IDE de arduino copiamos el código del archivo "Arduino_code.txt", lo compilamos y lo exportamos al Arduino
+
+### 6. Ejecución del Sistema
 Para iniciar el motor de simulación y el dashboard dinámico
 ```bash
 python main.py
 ```
 Luego, desde el dispositivo móvil donde se configuró el cliente IoT, accionamos el botón "Lanzar Satélite"
 
-### 6. Ejecución de los Test
+### 7. Ejecución de los Test
 Si queremos "probar" cada módulo por separado para ver si funciona correctamente o hay algun error de simulación.
 
 Para probar los propulsores del satélite
